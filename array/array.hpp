@@ -19,10 +19,14 @@ public:
   void print() const;
 };
 
+template <typename T>
+Array<T>::Array() : arrptr(new T[10]), iptr(arrptr), msize(0), mcapacity(10) {}
 
 template <typename T>
 Array<T>::Array(std::size_t capacity)
     : arrptr(new T[capacity]), iptr(arrptr), msize(0), mcapacity(capacity) {}
 
 template <typename T>
-Array<T>::Array():Array(10) {}
+Array<T>::get(const int index) const {
+
+}
