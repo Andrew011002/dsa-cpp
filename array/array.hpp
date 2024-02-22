@@ -19,6 +19,7 @@ public:
   void add(T elem);
   void remove(T elem);
   void insert(int index, T elem);
+  std::uint32_t count(T elem) const;
   std::uint32_t toindex(int index) const;
   bool outofbounds(int index) const;
   bool empty() const;
@@ -98,6 +99,16 @@ template <typename T> void array<T>::insert(int index, T elem) {
   msize++;
 }
 
+template <typename T> std::uint32_t array<T>::count(T elem) const {
+  T *ptr = arrptr;
+  std::uint32_t elemcount = 0;
+  for (int i = 0; i < size(); i++) {
+    if (*ptr++ == elem) {
+      elemcount++;
+    }
+  }
+  return elemcount;
+}
 template <typename T> bool array<T>::outofbounds(int index) const {
   return (abs(index) > size());
 }

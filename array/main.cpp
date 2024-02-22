@@ -7,9 +7,12 @@ int main() {
     arr.add(1);
     arr.add(12);
     arr.add(14);
+    arr.add(12);
+    arr.add(15);
     arr.remove(12);
-    std::cout << "here\n";
     arr.insert(0, 21);
+    printf("count for 12: %d\n", arr.count(12));
+    printf("count for 15: %d\n", arr.count(15));
     arr.print();
     printf("size: %lu, capacity: %lu\n", arr.size(), arr.capacity());
     return 0;
