@@ -13,6 +13,8 @@ int main() {
     arr.insert(0, 21);
     printf("count for 12: %d\n", arr.count(12));
     printf("count for 15: %d\n", arr.count(15));
+    arr.insert(6, 20);
+    arr.insert(-5, 2);
     arr.print();
     printf("size: %lu, capacity: %lu\n", arr.size(), arr.capacity());
     return 0;
