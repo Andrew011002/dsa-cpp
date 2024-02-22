@@ -16,6 +16,10 @@ int main() {
     arr.insert(6, 20);
     arr.insert(-5, 2);
     arr.print();
+    arr.removeall(12);
+    arr.add(15);
+    arr.remove(15, 2);
+    arr.print();
     printf("size: %lu, capacity: %lu\n", arr.size(), arr.capacity());
     return 0;
 }

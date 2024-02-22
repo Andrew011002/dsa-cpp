@@ -18,7 +18,10 @@ public:
   void modify(int index, T elem);
   void add(T elem);
   void remove(T elem);
+  void remove(T elem, std::uint32_t n);
+  void removeall(T elem);
   void insert(int index, T elem);
+  bool contains(T elem) const;
   std::uint32_t count(T elem) const;
   std::uint32_t toindex(int index) const;
   bool outofbounds(int index) const;
@@ -81,6 +84,27 @@ template <typename T> void array<T>::remove(T elem) {
   msize--;
 }
 
+template <typename T> void array<T>::remove(T elem, std::uint32_t n) {
+  if (empty()) {
+    throw std::exception();
+  }
+  while (contains(elem) && n > 0) {
+    remove(elem);
+    n--;
+  }
+}
+
+template <typename T> void array<T>::removeall(T elem) {
+  if (empty()) {
+    throw new std::exception();
+  }
+  std::uint32_t elemcount = count(elem);
+  if (elemcount == 0) {
+    throw new std::exception();
+  }
+  remove(elem, elemcount);
+}
+
 template <typename T> void array<T>::insert(int index, T elem) {
   if (full()) {
     throw new std::exception();
@@ -97,6 +121,16 @@ template <typename T> void array<T>::insert(int index, T elem) {
   }
   iptr = ptr;
   msize++;
+}
+
+template <typename T> bool array<T>::contains(T elem) const {
+  T *ptr = arrptr;
+  for (int i = 0; i < size(); i++) {
+    if (*ptr++ == elem) {
+      return true;
+    }
+  }
+  return false;
 }
 
 template <typename T> std::uint32_t array<T>::count(T elem) const {
