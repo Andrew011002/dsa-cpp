@@ -7,6 +7,7 @@ int main() {
     arr.add(1);
     arr.add(12);
     arr.add(14);
+    arr.remove(12);
     arr.print();
     printf("size: %lu, capacity: %lu\n", arr.size(), arr.capacity());
     return 0;
