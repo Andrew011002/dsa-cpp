@@ -23,6 +23,8 @@ public:
   void insert(int index, T elem);
   bool contains(T elem) const;
   std::uint32_t count(T elem) const;
+  int find(T elem) const;
+  int find(T elem, int start) const;
   std::uint32_t toindex(int index) const;
   bool outofbounds(int index) const;
   bool empty() const;
