@@ -35,7 +35,7 @@ public:
 };
 
 template <typename T>
-array<T>::array() : arrptr(new T[10]), iptr(arrptr), msize(0), mcapacity(10) {}
+array<T>::array() : arrptr(new T[8]), iptr(arrptr), msize(0), mcapacity(8) {}
 
 template <typename T>
 array<T>::array(std::size_t capacity)
@@ -145,6 +145,23 @@ template <typename T> std::uint32_t array<T>::count(T elem) const {
   }
   return elemcount;
 }
+
+template <typename T> int array<T>::find(T elem) const { return find(elem, 0); }
+
+template <typename T> int array<T>::find(T elem, int start) const {
+  if (outofbounds(start)) {
+    throw new std::exception();
+  }
+  start = toindex(start);
+  T *ptr = arrptr + start;
+  for (int i = start; i < size(); i++) {
+    if (*ptr++ == elem) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 template <typename T> bool array<T>::outofbounds(int index) const {
   return (abs(index) > size());
 }
