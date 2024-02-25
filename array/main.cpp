@@ -48,5 +48,8 @@ int main() {
   std::cout << "Full? " << (arr.full() ? "Yes\n" : "No\n");
   arr.print();
 
+  arr.clear();
+  arr.print();
+
   return 0;
 }

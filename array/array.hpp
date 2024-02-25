@@ -25,6 +25,7 @@ public:
   std::uint32_t count(T elem) const;
   int find(T elem) const;
   int find(T elem, int start) const;
+  void clear();
   std::uint32_t toindex(int index) const;
   bool outofbounds(int index) const;
   bool empty() const;
@@ -74,14 +75,14 @@ template <typename T> void array<T>::remove(T elem) {
   }
   T *ptr = arrptr;
   int index = 0;
-  while (index < size() && *ptr != elem) {
+  while (index < msize && *ptr != elem) {
     ptr++;
     index++;
   }
   if (*ptr != elem) {
     throw new std::exception();
   }
-  while (index < size() - 1) {
+  while (index < msize - 1) {
     *ptr = *(ptr + 1);
     ptr++;
     index++;
@@ -121,7 +122,7 @@ template <typename T> void array<T>::insert(int index, T elem) {
   }
   index = toindex(index);
   T *ptr = arrptr + index;
-  for (int i = index; i < size() + 1; i++) {
+  for (int i = index; i < msize + 1; i++) {
     T tmp = *ptr;
     *ptr++ = elem;
     elem = tmp;
@@ -132,7 +133,7 @@ template <typename T> void array<T>::insert(int index, T elem) {
 
 template <typename T> bool array<T>::contains(T elem) const {
   T *ptr = arrptr;
-  for (int i = 0; i < size(); i++) {
+  for (int i = 0; i < msize; i++) {
     if (*ptr++ == elem) {
       return true;
     }
@@ -143,7 +144,7 @@ template <typename T> bool array<T>::contains(T elem) const {
 template <typename T> std::uint32_t array<T>::count(T elem) const {
   T *ptr = arrptr;
   std::uint32_t elemcount = 0;
-  for (int i = 0; i < size(); i++) {
+  for (int i = 0; i < msize; i++) {
     if (*ptr++ == elem) {
       elemcount++;
     }
@@ -159,7 +160,7 @@ template <typename T> int array<T>::find(T elem, int start) const {
   }
   start = toindex(start);
   T *ptr = arrptr + start;
-  for (int i = start; i < size(); i++) {
+  for (int i = start; i < msize; i++) {
     if (*ptr++ == elem) {
       return i;
     }
@@ -167,13 +168,21 @@ template <typename T> int array<T>::find(T elem, int start) const {
   return -1;
 }
 
+template <typename T> void array<T>::clear() {
+  T *ptr = arrptr;
+  iptr = arrptr;
+  for (int i = 0; i < mcapacity; i++) {
+    *ptr++ = T();
+  }
+}
+
 template <typename T> bool array<T>::outofbounds(int index) const {
-  return (abs(index) > size());
+  return (abs(index) > msize);
 }
 
 template <typename T> std::uint32_t array<T>::toindex(int index) const {
   if (index < 0) {
-    return size() + index;
+    return msize + index;
   }
   return index;
 }
@@ -191,9 +200,9 @@ template <typename T> std::size_t array<T>::capacity() const {
 template <typename T> void array<T>::print() const {
   T *ptr = arrptr;
   std::cout << "[";
-  for (int i = 0; i < size(); i++) {
+  for (int i = 0; i < msize; i++) {
     std::cout << *ptr++;
-    if (i < size() - 1) {
+    if (i < msize - 1) {
       std::cout << ", ";
     }
   }
