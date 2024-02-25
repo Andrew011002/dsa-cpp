@@ -43,15 +43,20 @@ array<T>::array(std::size_t capacity)
 
 template <typename T> T array<T>::get(int index) const {
   if (empty()) {
-    std::cout << "empty here\n";
     throw new std::exception();
   }
   if (outofbounds(index)) {
-    std::cout << "oob here\n";
     throw new std::exception();
   }
   index = toindex(index);
   return *(arrptr + index);
+}
+template <typename T> void array<T>::modify(int index, T elem) {
+  if (outofbounds(index)) {
+    throw new std::exception();
+  }
+  index = toindex(index);
+  *(arrptr + index) = elem;
 }
 
 template <typename T> void array<T>::add(T elem) {
