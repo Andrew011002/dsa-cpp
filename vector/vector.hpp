@@ -1,9 +1,10 @@
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <memory>
 
-const std::size_t CAPACITY = 0;
+const std::size_t CAPACITY = 4;
 
 template <typename T> class vector {
   std::size_t m_size;
@@ -41,10 +42,10 @@ template <typename T> vector<T>::vector(std::uint32_t capacity) {
   m_ptr = std::make_unique<T[]>(capacity);
 }
 
-template <typename T> vector<T>::vector() : vector<T>(CAPACITY) {}
+template <typename T> vector<T>::vector() : vector<T>(0) {}
 
 template <typename T> void vector<T>::modify(int index, T element) {
-  *(m_ptr + index) = element;
+  *(m_ptr.get() + index) = element;
 }
 
 template <typename T> T vector<T>::get(int index) const {
@@ -52,8 +53,19 @@ template <typename T> T vector<T>::get(int index) const {
 }
 
 template <typename T> void vector<T>::append(T element) {
-  *(m_ptr + m_size++) = element;
+  *(m_ptr.get() + m_size++) = element;
 }
+
+template <typename T> void vector<T>::resize() {
+  m_capacity = std::max(m_capacity * 2, CAPACITY);
+  std::unique_ptr<T[]> old_ptr = std::move(m_ptr);
+  std::size_t old_size = m_size;
+  m_ptr = std::make_unique<T[]>(m_capacity);
+  m_size = 0;
+  for (int i = 0; i < old_size; i++) {
+    append(*(old_ptr.get() + i));
+  }
+};
 
 template <typename T> bool vector<T>::empty() const { return m_size == 0; }
 
