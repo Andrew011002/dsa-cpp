@@ -8,7 +8,7 @@ const std::size_t CAPACITY = 0;
 template <typename T> class vector {
   std::size_t m_size;
   std::size_t m_capacity;
-  std::unique_ptr<T> m_ptr;
+  std::unique_ptr<T[]> m_ptr;
 
 public:
   vector();
@@ -38,7 +38,7 @@ public:
 template <typename T> vector<T>::vector(std::uint32_t capacity) {
   m_size = 0;
   m_capacity = capacity;
-  m_ptr = std::make_unique(new T[m_capacity]);
+  m_ptr = std::make_unique<T[]>(capacity);
 }
 
 template <typename T> vector<T>::vector() : vector<T>(CAPACITY) {}
