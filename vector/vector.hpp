@@ -1,10 +1,10 @@
-#include <algorithm>
-#include <cstddef>
 #include <cstdint>
+#include <cstdlib>
+#include <exception>
 #include <iostream>
 #include <memory>
 
-const std::size_t CAPACITY = 4;
+const std::size_t DEFAULT_CAPACITY = 4;
 
 template <typename T> class vector {
   std::size_t m_size;
@@ -45,19 +45,70 @@ template <typename T> vector<T>::vector(std::uint32_t capacity) {
 template <typename T> vector<T>::vector() : vector<T>(0) {}
 
 template <typename T> void vector<T>::modify(int index, T element) {
+  index = toindex(index);
+  if (outofbounds(index)) {
+    throw new std::exception();
+  }
   *(m_ptr.get() + index) = element;
 }
 
 template <typename T> T vector<T>::get(int index) const {
-  return m_ptr.get() + index;
+  index = toindex(index);
+  if (outofbounds(index)) {
+    throw new std::exception();
+  }
+  return *(m_ptr.get() + index);
 }
 
 template <typename T> void vector<T>::append(T element) {
+  if (full()) {
+    resize();
+  }
   *(m_ptr.get() + m_size++) = element;
 }
 
+template <typename T> void vector<T>::insert(int index, T element) {
+  index = toindex(index);
+  if (outofbounds(index)) {
+    throw new std::exception();
+  }
+  if (full()) {
+    resize();
+  }
+  if (index == m_size) {
+    append(element);
+    return;
+  }
+  for (int i = index; i < m_size + 1; i++) {
+    T tmp = *(m_ptr.get() + i);
+    *(m_ptr.get() + i) = element;
+    element = tmp;
+  }
+  m_size++;
+}
+
+template <typename T> bool vector<T>::contains(T element) const {
+  for (int i = 0; i < m_size; i++) {
+    if (*(m_ptr.get() + i) == element) {
+      return true;
+    }
+  }
+  return false;
+}
+
+template <typename T> std::uint32_t vector<T>::toindex(int index) const {
+  if (index < 0) {
+    return index + m_size;
+  }
+  return index;
+}
+
+template <typename T> bool vector<T>::outofbounds(int index) const {
+  return index < 0 || index >= m_size;
+}
+
 template <typename T> void vector<T>::resize() {
-  m_capacity = std::max(m_capacity * 2, CAPACITY);
+  m_capacity = std::max(m_capacity * 2, DEFAULT_CAPACITY);
   std::unique_ptr<T[]> old_ptr = std::move(m_ptr);
   std::size_t old_size = m_size;
   m_ptr = std::make_unique<T[]>(m_capacity);
@@ -80,10 +131,9 @@ template <typename T> std::size_t vector<T>::capacity() const {
 }
 
 template <typename T> void vector<T>::print() const {
-  T *ptr = m_ptr.get();
   std::cout << "[";
   for (int i = 0; i < m_size; i++) {
-    std::cout << *ptr++;
+    std::cout << *(m_ptr.get() + i);
     if (i < m_size - 1) {
       std::cout << ", ";
     }
