@@ -170,10 +170,10 @@ template <typename T> int vector<T>::find(T element, int start) const {
 }
 
 template <typename T> void vector<T>::clear() {
-  for (int i = 0; i < m_capacity; i++) {
+  for (int i = 0; i < m_size; i++) {
     *(m_ptr.get() + i) = T();
-    m_size--;
   }
+  m_size = 0;
 }
 
 template <typename T> std::uint32_t vector<T>::toindex(int index) const {
