@@ -10,6 +10,7 @@ template <typename T> class vector {
   std::size_t m_size;
   std::size_t m_capacity;
   std::unique_ptr<T[]> m_ptr;
+  void removehelper(T element);
 
 public:
   vector();
@@ -85,6 +86,40 @@ template <typename T> void vector<T>::insert(int index, T element) {
   m_size++;
 }
 
+template <typename T> void vector<T>::removehelper(T element) {
+  int index = 0;
+  while (index < m_size && *(m_ptr.get() + index) != element) {
+    index++;
+  }
+  if (index == m_size) {
+    throw new std::exception();
+  }
+  for (int i = index; i < m_size; i++) {
+    *(m_ptr.get() + i) = *(m_ptr.get() + i + 1);
+  }
+  m_size--;
+}
+
+template <typename T> void vector<T>::remove(T element) {
+  if (!contains(element)) {
+    throw new std::exception();
+  }
+  removehelper(element);
+}
+
+/* template <typename T> void vector<T>::remove(T element, std::uint32_t n) { */
+/*   std::uint32_t m = count(element); */
+/*   if (m != n) { */
+/*     throw new std::exception(); */
+/*   } */
+/*   int i = 0; */
+/*   while (m) { */
+/*     if (*(m_ptr.get() + i++) == element) { */
+/*  */
+/*         } */
+/*   } */
+/* } */
+/*  */
 template <typename T> bool vector<T>::contains(T element) const {
   for (int i = 0; i < m_size; i++) {
     if (*(m_ptr.get() + i) == element) {
