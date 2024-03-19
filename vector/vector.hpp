@@ -94,6 +94,16 @@ template <typename T> bool vector<T>::contains(T element) const {
   return false;
 }
 
+template <typename T> std::uint32_t vector<T>::count(T element) const {
+  std::uint32_t n = 0;
+  for (int i = 0; i < m_size; i++) {
+    if (*(m_ptr.get() + i) == element) {
+      n++;
+    }
+  }
+  return n;
+}
+
 template <typename T> std::uint32_t vector<T>::toindex(int index) const {
   if (index < 0) {
     return index + m_size;

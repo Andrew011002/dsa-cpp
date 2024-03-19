@@ -3,17 +3,11 @@
 
 int main() {
   vector<int> v(10);
-  printf("size: %ld\n", v.size());
-  v.append(15);
-  printf("size: %ld\n", v.size());
-  v.append(13);
-  v.append(20);
-  printf("size: %ld\n", v.size());
+  v.append(5);
+  v.append(5);
+  v.append(5);
+  v.insert(3, 1);
   v.print();
-  v.insert(0, 10);
-  printf("contains %d? %d\n", 10, v.contains(10));
-  printf("contains %d? %d\n", 1, v.contains(1));
-  v.resize();
-  v.print();
+  printf("Count of %d: %d\n", 5, v.count(5));
   return 0;
 }
