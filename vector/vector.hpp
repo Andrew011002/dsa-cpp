@@ -146,6 +146,34 @@ template <typename T> std::uint32_t vector<T>::count(T element) const {
   return n;
 }
 
+template <typename T> int vector<T>::find(T element) const {
+  for (int i = 0; i < m_size; i++) {
+    if (*(m_ptr.get() + i) == element) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+template <typename T> int vector<T>::find(T element, int start) const {
+  if (outofbounds(start)) {
+    throw new std::exception();
+  }
+  for (int i = toindex(start); i < m_size; i++) {
+    if (*(m_ptr.get() + i) == element) {
+      return i;
+    }
+    return -1;
+  }
+}
+
+template <typename T> void vector<T>::clear() {
+  for (int i = 0; i < m_capacity; i++) {
+    *(m_ptr.get() + i) = new T();
+    m_size--;
+  }
+}
+
 template <typename T> std::uint32_t vector<T>::toindex(int index) const {
   if (index < 0) {
     return index + m_size;
