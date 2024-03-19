@@ -94,9 +94,11 @@ template <typename T> void vector<T>::removehelper(T element) {
   if (index == m_size) {
     throw new std::exception();
   }
-  for (int i = index; i < m_size; i++) {
-    *(m_ptr.get() + i) = *(m_ptr.get() + i + 1);
+  while (index < m_size - 1) {
+    *(m_ptr.get() + index) = *(m_ptr.get() + index + 1);
+    index++;
   }
+  *(m_ptr.get() + index) = T();
   m_size--;
 }
 
@@ -169,7 +171,7 @@ template <typename T> int vector<T>::find(T element, int start) const {
 
 template <typename T> void vector<T>::clear() {
   for (int i = 0; i < m_capacity; i++) {
-    *(m_ptr.get() + i) = new T();
+    *(m_ptr.get() + i) = T();
     m_size--;
   }
 }

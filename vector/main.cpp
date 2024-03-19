@@ -13,7 +13,6 @@ int main() {
   v.print();
   printf("Size: %ld\n", v.size());
   printf("Count of %d: %d\n", 5, v.count(5));
-  v.clear();
   v.print();
   return 0;
 }
