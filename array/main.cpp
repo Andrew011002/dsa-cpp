@@ -1,5 +1,4 @@
 #include "array.hpp"
-#include <iterator>
 
 int main() {
   array<int> arr;

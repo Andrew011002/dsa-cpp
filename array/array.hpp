@@ -177,7 +177,10 @@ template <typename T> void array<T>::clear() {
 }
 
 template <typename T> bool array<T>::outofbounds(int index) const {
-  return (abs(index) > msize);
+  if (index < 0) {
+    return abs(index) > msize;
+  }
+  return index >= msize;
 }
 
 template <typename T> std::uint32_t array<T>::toindex(int index) const {
