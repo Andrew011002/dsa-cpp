@@ -45,19 +45,17 @@ template <typename T> vector<T>::vector(std::uint32_t capacity) {
 template <typename T> vector<T>::vector() : vector<T>(0) {}
 
 template <typename T> void vector<T>::modify(int index, T element) {
-  index = toindex(index);
   if (outofbounds(index)) {
     throw new std::exception();
   }
-  *(m_ptr.get() + index) = element;
+  *(m_ptr.get() + toindex(index)) = element;
 }
 
 template <typename T> T vector<T>::get(int index) const {
-  index = toindex(index);
   if (outofbounds(index)) {
     throw new std::exception();
   }
-  return *(m_ptr.get() + index);
+  return *(m_ptr.get() + toindex(index));
 }
 
 template <typename T> void vector<T>::append(T element) {
@@ -68,13 +66,13 @@ template <typename T> void vector<T>::append(T element) {
 }
 
 template <typename T> void vector<T>::insert(int index, T element) {
-  index = toindex(index);
-  if (outofbounds(index)) {
+  if (index != m_size && outofbounds(index)) {
     throw new std::exception();
   }
   if (full()) {
     resize();
   }
+  index = toindex(index);
   if (index == m_size) {
     append(element);
     return;
@@ -104,7 +102,10 @@ template <typename T> std::uint32_t vector<T>::toindex(int index) const {
 }
 
 template <typename T> bool vector<T>::outofbounds(int index) const {
-  return index < 0 || index >= m_size;
+  if (index < 0) {
+    return std::abs(index) > m_size;
+  }
+  return index >= m_size;
 }
 
 template <typename T> void vector<T>::resize() {
