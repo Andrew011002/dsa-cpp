@@ -107,19 +107,26 @@ template <typename T> void vector<T>::remove(T element) {
   removehelper(element);
 }
 
-/* template <typename T> void vector<T>::remove(T element, std::uint32_t n) { */
-/*   std::uint32_t m = count(element); */
-/*   if (m != n) { */
-/*     throw new std::exception(); */
-/*   } */
-/*   int i = 0; */
-/*   while (m) { */
-/*     if (*(m_ptr.get() + i++) == element) { */
-/*  */
-/*         } */
-/*   } */
-/* } */
-/*  */
+template <typename T> void vector<T>::remove(T element, std::uint32_t n) {
+  std::uint32_t m = count(element);
+  if (m < n) {
+    throw new std::exception();
+  }
+  for (int i = 0; i < n; i++) {
+    removehelper(element);
+  }
+}
+
+template <typename T> void vector<T>::removeall(T element) {
+  std::uint32_t m = count(element);
+  if (!m) {
+    throw new std::exception();
+  }
+  for (int i = 0; i < m; i++) {
+    removehelper(element);
+  }
+}
+
 template <typename T> bool vector<T>::contains(T element) const {
   for (int i = 0; i < m_size; i++) {
     if (*(m_ptr.get() + i) == element) {
