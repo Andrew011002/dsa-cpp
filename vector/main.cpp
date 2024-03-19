@@ -2,7 +2,7 @@
 #include <cstdio>
 
 int main() {
-  vector<int> v(10);
+  vector<int> v(2);
   v.append(5);
   v.append(5);
   v.append(5);
