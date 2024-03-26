@@ -1,3 +1,6 @@
+#include <cstdint>
+#include <cstdlib>
+#include <exception>
 #include <iostream>
 #include <memory>
 
@@ -13,6 +16,8 @@ template <typename T> class singlylist {
   std::shared_ptr<node<T>> m_tail;
   std::size_t m_length;
   void remove_helper(T key);
+  bool out_of_bounds(int index) const;
+  std::uint32_t to_index(int index) const;
 
 public:
   singlylist();
@@ -39,32 +44,91 @@ template <typename T> void singlylist<T>::add(T key) {
 }
 
 template <typename T> void singlylist<T>::remove_helper(T key) {
-  node<T> *curr_ptr = m_head.get();
-  node<T> *prev_ptr = nullptr;
-  if (curr_ptr == m_head.get() && curr_ptr == m_tail.get()) {
+  std::shared_ptr<node<T>> curr_ptr = m_head;
+  std::shared_ptr<node<T>> prev_ptr;
+
+  while (curr_ptr->key != key) {
+    prev_ptr = curr_ptr;
+    curr_ptr = curr_ptr->next;
+  }
+
+  if (curr_ptr.get() == m_head.get() && curr_ptr.get() == m_tail.get()) {
     m_head.reset();
     m_tail.reset();
-  } else if (curr_ptr == m_head.get()) {
+
+  } else if (curr_ptr.get() == m_head.get()) {
     m_head = m_head->next;
+
+  } else if (curr_ptr.get() == m_tail.get()) {
+    m_tail = prev_ptr;
+    m_tail->next.reset();
+
   } else {
     prev_ptr->next = curr_ptr->next;
   }
   m_length--;
 }
 
-template <typename T> void singlylist<T>::remove(T key) {}
+template <typename T> void singlylist<T>::remove(T key) {
+  if (contains(key) == false) {
+    throw new std::exception();
+  }
+  remove_helper(key);
+}
 
-template <typename T> void singlylist<T>::insert(T key, int index) {}
+template <typename T> void singlylist<T>::insert(T key, int index) {
+  if (out_of_bounds(index) && index > m_length) {
+    throw new std::exception();
+  }
+
+  index = to_index(index);
+  std::shared_ptr<node<T>> curr_ptr = m_head;
+  std::shared_ptr<node<T>> prev_ptr;
+
+  for (int i = 0; i < index; i++) {
+    prev_ptr = curr_ptr;
+    curr_ptr = curr_ptr->next;
+  }
+
+  std::shared_ptr<node<T>> new_node = std::make_shared<node<T>>(key);
+  if (index == 0) {
+    new_node->next = m_head;
+    m_head = new_node;
+
+  } else if (index == m_length) {
+    m_tail->next = new_node;
+    m_tail = new_node;
+
+  } else {
+    new_node->next = curr_ptr;
+    prev_ptr->next = new_node;
+  }
+  m_length++;
+}
 
 template <typename T> bool singlylist<T>::contains(T key) const {
   node<T> *ptr = m_head.get();
   for (int i = 0; i < m_length; i++) {
-    if (*ptr == key) {
+    if (ptr->key == key) {
       return true;
     }
     ptr = ptr->next.get();
   }
   return false;
+}
+
+template <typename T> bool singlylist<T>::out_of_bounds(int index) const {
+  if (index < 0) {
+    return std::abs(index) > m_length;
+  }
+  return index >= m_length;
+}
+
+template <typename T> std::uint32_t singlylist<T>::to_index(int index) const {
+  if (index < 0) {
+    return m_length + index;
+  }
+  return index;
 }
 
 template <typename T> int singlylist<T>::length() const { return m_length; }
