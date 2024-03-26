@@ -28,11 +28,9 @@ template <typename T>
 singlylist<T>::singlylist() : m_head(nullptr), m_tail(nullptr), m_length(0) {}
 
 template <typename T> void singlylist<T>::add(T key) {
-  if (m_length == 0) {
+  if (m_head == nullptr) {
     m_head = std::make_shared<node<T>>(key);
-  } else if (m_length == 1) {
-    m_tail = std::make_shared<node<T>>(key);
-    m_head->next = m_tail;
+    m_tail = m_head;
   } else {
     m_tail->next = std::make_shared<node<T>>(key);
     m_tail = m_tail->next;
@@ -41,16 +39,17 @@ template <typename T> void singlylist<T>::add(T key) {
 }
 
 template <typename T> void singlylist<T>::remove_helper(T key) {
-  if (m_length == 1) {
-    m_head.reset();
-  }
   node<T> *curr_ptr = m_head.get();
   node<T> *prev_ptr = nullptr;
-  while (*curr_ptr != key) {
-    prev_ptr = curr_ptr;
-    curr_ptr = curr_ptr->next.get();
+  if (curr_ptr == m_head.get() && curr_ptr == m_tail.get()) {
+    m_head.reset();
+    m_tail.reset();
+  } else if (curr_ptr == m_head.get()) {
+    m_head = m_head->next;
+  } else {
+    prev_ptr->next = curr_ptr->next;
   }
-  if
+  m_length--;
 }
 
 template <typename T> void singlylist<T>::remove(T key) {}
