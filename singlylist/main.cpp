@@ -1,4 +1,5 @@
 #include "singlylist.hpp"
+#include <cstdio>
 
 int main() {
   auto list = singlylist<int>();
@@ -17,4 +18,10 @@ int main() {
   list.remove(10);
   list.insert(15, 1);
   list.print();
+  list.insert(100, 0);
+  list.print();
+  printf("Contains %d: %d\n", 100, list.contains(100));
+  printf("Contains %d: %d\n", 15, list.contains(15));
+  printf("Contains %d: %d\n", 11, list.contains(11));
+  printf("Length: %d\n", list.length());
 }
