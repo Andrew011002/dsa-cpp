@@ -20,8 +20,16 @@ public:
 
   iter &operator++() {
     if (curr_ptr != nullptr) {
+      curr_ptr = curr_ptr->next;
     }
+    return *this;
   }
+
+  bool operator!=(const iter &other) const {
+    return curr_ptr.get() != other.curr_ptr.get();
+  }
+
+  T operator*() const { return curr_ptr->key; }
 };
 
 template <typename T> class singlylist {
@@ -47,11 +55,26 @@ public:
   int find(T key) const;
   std::size_t length() const;
   void print() const;
+  iter<T> begin() const;
+  iter<T> end() const;
 };
 
 template <typename T>
 singlylist<T>::singlylist() : m_head(nullptr), m_tail(nullptr), m_length(0) {}
 
+template <typename T> bool singlylist<T>::out_of_bounds(int index) const {
+  if (index < 0) {
+    return std::abs(index) > m_length;
+  }
+  return index >= m_length;
+}
+
+template <typename T> std::uint32_t singlylist<T>::to_index(int index) const {
+  if (index < 0) {
+    return m_length + index;
+  }
+  return index;
+}
 template <typename T> void singlylist<T>::update(T key, int index) {
   if (out_of_bounds(index)) {
     throw new std::exception();
@@ -207,18 +230,12 @@ template <typename T> int singlylist<T>::find(T key) const {
   return find(key, 0);
 }
 
-template <typename T> bool singlylist<T>::out_of_bounds(int index) const {
-  if (index < 0) {
-    return std::abs(index) > m_length;
-  }
-  return index >= m_length;
+template <typename T> iter<T> singlylist<T>::begin() const {
+  return iter<T>(m_head);
 }
 
-template <typename T> std::uint32_t singlylist<T>::to_index(int index) const {
-  if (index < 0) {
-    return m_length + index;
-  }
-  return index;
+template <typename T> iter<T> singlylist<T>::end() const {
+  return iter<T>(m_tail->next);
 }
 
 template <typename T> std::size_t singlylist<T>::length() const {

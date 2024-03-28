@@ -13,4 +13,10 @@ int main() {
   list.remove(2, 2);
   list.remove(2);
   list.print();
+
+  printf("[ ");
+  for (auto i = list.begin(); i != list.end(); ++i) {
+    printf("%d ", *i);
+  }
+  printf("]\n");
 }
