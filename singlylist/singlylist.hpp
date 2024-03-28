@@ -226,14 +226,14 @@ template <typename T> std::size_t singlylist<T>::length() const {
 }
 
 template <typename T> void singlylist<T>::print() const {
-  node<T> *ptr = m_head.get();
+  std::shared_ptr<node<T>> ptr = m_head;
   std::cout << "[";
   for (int i = 0; i < m_length; i++) {
     std::cout << ptr->key;
     if (i < m_length - 1) {
       std::cout << ", ";
     }
-    ptr = ptr->next.get();
+    ptr = ptr->next;
   }
   std::cout << "]\n";
 }
