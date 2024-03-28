@@ -160,6 +160,10 @@ template <typename T> std::uint32_t singlylist<T>::count(T key) const {
 }
 
 template <typename T> int singlylist<T>::find(T key, int start) const {
+  if (out_of_bounds(start)) {
+    throw new std::exception();
+  }
+  start = to_index(start);
   std::shared_ptr<node<T>> ptr = m_head;
   for (int i = 0; i < m_length; i++) {
     if (ptr->key == key && i >= start) {

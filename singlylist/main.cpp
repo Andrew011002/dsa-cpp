@@ -14,5 +14,5 @@ int main() {
   printf("Count of %d is %d\n", 0, list.count(0));
   printf("Count of %d is %d\n", 15, list.count(15));
 
-  printf("Index of %d starting at %d is %d\n", 5, 10, list.find(5, 10));
+  printf("Index of %d starting at %d is %d\n", 5, -11, list.find(5, -11));
 }
