@@ -31,6 +31,7 @@ public:
   void removeall(T key);
   bool contains(T key) const;
   std::uint32_t count(T key) const;
+  int find(T key, int index) const;
   int find(T key) const;
   std::size_t length() const;
   void print() const;
@@ -144,6 +145,33 @@ template <typename T> bool singlylist<T>::contains(T key) const {
     ptr = ptr->next.get();
   }
   return false;
+}
+
+template <typename T> std::uint32_t singlylist<T>::count(T key) const {
+  std::uint32_t amount = 0;
+  std::shared_ptr<node<T>> ptr = m_head;
+  for (int i = 0; i < m_length; i++) {
+    if (ptr->key == key) {
+      amount++;
+    }
+    ptr = ptr->next;
+  }
+  return amount;
+}
+
+template <typename T> int singlylist<T>::find(T key, int start) const {
+  std::shared_ptr<node<T>> ptr = m_head;
+  for (int i = 0; i < m_length; i++) {
+    if (ptr->key == key && i >= start) {
+      return i;
+    }
+    ptr = ptr->next;
+  }
+  return -1;
+}
+
+template <typename T> int singlylist<T>::find(T key) const {
+  return find(key, 0);
 }
 
 template <typename T> bool singlylist<T>::out_of_bounds(int index) const {
