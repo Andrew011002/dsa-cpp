@@ -12,6 +12,18 @@ public:
   std::shared_ptr<node<T>> next;
 };
 
+template <typename T> class iter {
+  std::shared_ptr<node<T>> curr_ptr;
+
+public:
+  iter(std::shared_ptr<node<T>> ptr) : curr_ptr(ptr) {}
+
+  iter &operator++() {
+    if (curr_ptr != nullptr) {
+    }
+  }
+};
+
 template <typename T> class singlylist {
   std::shared_ptr<node<T>> m_head;
   std::shared_ptr<node<T>> m_tail;
