@@ -10,10 +10,7 @@ int main() {
   list.add(2);
   list.add(11);
   list.print();
-  printf("Count of %d is %d\n", 2, list.count(2));
-  printf("Count of %d is %d\n", 0, list.count(0));
-  printf("Count of %d is %d\n", 15, list.count(15));
-
-  printf("Index of %d starting at %d is %d\n", 5, -11, list.find(5, -11));
-  printf("Index of %d starting at %d is %d\n", 6, -3, list.find(6, -3));
+  list.remove(2, 2);
+  list.remove(2);
+  list.print();
 }

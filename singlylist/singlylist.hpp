@@ -28,7 +28,7 @@ public:
   void insert(T key, int index);
   void remove(T key);
   void remove(T key, std::uint32_t n);
-  void removeall(T key);
+  void remove_all(T key);
   bool contains(T key) const;
   std::uint32_t count(T key) const;
   int find(T key, int index) const;
@@ -104,6 +104,23 @@ template <typename T> void singlylist<T>::remove(T key) {
     throw new std::exception();
   }
   remove_helper(key);
+}
+
+template <typename T> void singlylist<T>::remove(T key, std::uint32_t n) {
+  std::uint32_t amount = count(key);
+  if (amount < n) {
+    throw new std::exception();
+  }
+  for (int i = 0; i < n; i++) {
+    remove_helper(key);
+  }
+}
+
+template <typename T> void singlylist<T>::remove_all(T key) {
+  std::uint32_t amount = count(key);
+  for (int i = 0; i < amount; i++) {
+    remove_helper(key);
+  }
 }
 
 template <typename T> void singlylist<T>::insert(T key, int index) {
