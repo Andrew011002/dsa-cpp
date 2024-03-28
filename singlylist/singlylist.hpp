@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -21,16 +22,44 @@ template <typename T> class singlylist {
 
 public:
   singlylist();
+  void update(T key, int index);
+  T get(int index) const;
   void add(T key);
   void insert(T key, int index);
   void remove(T key);
+  void remove(T key, std::uint32_t n);
+  void removeall(T key);
   bool contains(T key) const;
-  int length() const;
+  std::uint32_t count(T key) const;
+  int find(T key) const;
+  std::size_t length() const;
   void print() const;
 };
 
 template <typename T>
 singlylist<T>::singlylist() : m_head(nullptr), m_tail(nullptr), m_length(0) {}
+
+template <typename T> void singlylist<T>::update(T key, int index) {
+  if (out_of_bounds(index)) {
+    throw new std::exception();
+  }
+  std::shared_ptr<node<T>> ptr = m_head;
+  for (int i = 0; i < index; i++) {
+    ptr = ptr->next;
+  }
+  ptr->key = key;
+}
+
+template <typename T> T singlylist<T>::get(int index) const {
+  if (out_of_bounds(index)) {
+    throw new std::exception();
+  }
+  std::shared_ptr<node<T>> ptr = m_head;
+  for (int i = 0; i < index; i++) {
+    ptr = ptr->next;
+  }
+  return ptr->key;
+}
 
 template <typename T> void singlylist<T>::add(T key) {
   if (m_head == nullptr) {
@@ -131,7 +160,9 @@ template <typename T> std::uint32_t singlylist<T>::to_index(int index) const {
   return index;
 }
 
-template <typename T> int singlylist<T>::length() const { return m_length; }
+template <typename T> std::size_t singlylist<T>::length() const {
+  return m_length;
+}
 
 template <typename T> void singlylist<T>::print() const {
   node<T> *ptr = m_head.get();
