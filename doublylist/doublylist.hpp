@@ -13,7 +13,8 @@ public:
   node(T k);
 };
 
-template <typename T> node<T>::node(T k) : key(k) {}
+template <typename T>
+node<T>::node(T k) : key(k), prev(nullptr), next(nullptr) {}
 
 template <typename T> class iterator {
   std::shared_ptr<node<T>> curr_ptr;
@@ -33,7 +34,7 @@ template <typename T>
 iterator<T>::iterator(std::shared_ptr<node<T>> ptr) : curr_ptr(ptr) {}
 
 template <typename T> iterator<T> &iterator<T>::operator++() {
-  if (curr_ptr->next != nullptr) {
+  if (curr_ptr != nullptr) {
     curr_ptr = curr_ptr->next;
   }
   return *this;
@@ -44,10 +45,10 @@ template <typename T> iterator<T> iterator<T>::operator++(int) const {
 }
 
 template <typename T> iterator<T> &iterator<T>::operator--() {
-  if (curr_ptr->prev != nullptr) {
+  if (curr_ptr != nullptr) {
     curr_ptr = curr_ptr->prev;
   }
-  return this;
+  return *this;
 }
 
 template <typename T> iterator<T> iterator<T>::operator--(int) const {
@@ -61,8 +62,7 @@ bool iterator<T>::operator==(const iterator<T> &other) const {
 
 template <typename T>
 bool iterator<T>::operator!=(const iterator<T> &other) const {
-  std::cout << curr_ptr << " " << other.curr_ptr << std::endl;
-  return curr_ptr != other.curr_ptr;
+  return curr_ptr.get() != other.curr_ptr.get();
 }
 
 template <typename T> T iterator<T>::operator*() const {
