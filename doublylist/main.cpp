@@ -1,5 +1,5 @@
 #include "doublylist.hpp"
-#include <cstdio>
+#include <ostream>
 
 int main() {
   doublylist<int> list;
@@ -8,8 +8,11 @@ int main() {
   list.append(1);
   list.append(2);
 
-  for (auto i = list.begin(); i != list.end(); ++i) {
-    printf("%d\n", *i);
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    it->key = 10;
+  }
+  for (auto it = list.begin(); it != list.end(); ++it) {
+    std::cout << *it << std::endl;
   }
   return 0;
 }

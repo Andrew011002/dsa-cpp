@@ -22,12 +22,13 @@ template <typename T> class iterator {
 public:
   iterator(std::shared_ptr<node<T>> ptr);
   iterator<T> &operator++();
-  iterator<T> operator++(int) const;
+  iterator<T> operator++(int);
   iterator<T> &operator--();
-  iterator<T> operator--(int) const;
+  iterator<T> operator--(int);
   bool operator==(const iterator<T> &other) const;
   bool operator!=(const iterator<T> &other) const;
   T operator*() const;
+  node<T> *operator->() const;
 };
 
 template <typename T>
@@ -40,8 +41,12 @@ template <typename T> iterator<T> &iterator<T>::operator++() {
   return *this;
 }
 
-template <typename T> iterator<T> iterator<T>::operator++(int) const {
-  return iterator<T>(curr_ptr->next);
+template <typename T> iterator<T> iterator<T>::operator++(int) {
+  iterator<T> temp = *this;
+  if (curr_ptr != nullptr) {
+    curr_ptr = curr_ptr->next;
+  }
+  return temp;
 }
 
 template <typename T> iterator<T> &iterator<T>::operator--() {
@@ -51,8 +56,12 @@ template <typename T> iterator<T> &iterator<T>::operator--() {
   return *this;
 }
 
-template <typename T> iterator<T> iterator<T>::operator--(int) const {
-  return iterator<T>(curr_ptr->prev);
+template <typename T> iterator<T> iterator<T>::operator--(int) {
+  iterator<T> temp = *this;
+  if (curr_ptr != nullptr) {
+    curr_ptr = curr_ptr->next;
+  }
+  return temp;
 }
 
 template <typename T>
@@ -62,7 +71,7 @@ bool iterator<T>::operator==(const iterator<T> &other) const {
 
 template <typename T>
 bool iterator<T>::operator!=(const iterator<T> &other) const {
-  return curr_ptr.get() != other.curr_ptr.get();
+  return curr_ptr != other.curr_ptr;
 }
 
 template <typename T> T iterator<T>::operator*() const {
@@ -70,6 +79,10 @@ template <typename T> T iterator<T>::operator*() const {
     return curr_ptr->key;
   }
   return T();
+}
+
+template <typename T> node<T> *iterator<T>::operator->() const {
+  return curr_ptr.get();
 }
 
 template <typename T> class doublylist {
