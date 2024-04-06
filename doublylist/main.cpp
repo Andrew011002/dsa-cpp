@@ -1,4 +1,6 @@
 #include "doublylist.hpp"
+#include <cstdio>
+#include <iostream>
 #include <ostream>
 
 int main() {
@@ -8,11 +10,7 @@ int main() {
   list.append(1);
   list.append(2);
 
-  for (auto it = list.begin(); it != list.end(); ++it) {
-    it->key = 10;
-  }
-  for (auto it = list.begin(); it != list.end(); ++it) {
-    std::cout << *it << std::endl;
-  }
+  list.update(-1, 10);
+  printf("%d\n", list.get(-1));
   return 0;
 }

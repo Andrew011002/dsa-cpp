@@ -2,7 +2,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <exception>
-#include <iostream>
 #include <memory>
 
 template <typename T> class node {
@@ -28,7 +27,7 @@ public:
   bool operator==(const iterator<T> &other) const;
   bool operator!=(const iterator<T> &other) const;
   T operator*() const;
-  node<T> *operator->() const;
+  std::shared_ptr<node<T>> operator->() const;
 };
 
 template <typename T>
@@ -59,7 +58,7 @@ template <typename T> iterator<T> &iterator<T>::operator--() {
 template <typename T> iterator<T> iterator<T>::operator--(int) {
   iterator<T> temp = *this;
   if (curr_ptr != nullptr) {
-    curr_ptr = curr_ptr->next;
+    curr_ptr = curr_ptr->prev;
   }
   return temp;
 }
@@ -81,8 +80,8 @@ template <typename T> T iterator<T>::operator*() const {
   return T();
 }
 
-template <typename T> node<T> *iterator<T>::operator->() const {
-  return curr_ptr.get();
+template <typename T> std::shared_ptr<node<T>> iterator<T>::operator->() const {
+  return curr_ptr;
 }
 
 template <typename T> class doublylist {
@@ -113,7 +112,7 @@ template <typename T> bool doublylist<T>::out_of_bounds(int index) const {
   if (index < 0) {
     return std::abs(index) > m_length;
   }
-  return index < m_length;
+  return index >= m_length;
 }
 
 template <typename T> std::uint32_t doublylist<T>::to_index(int index) const {
@@ -136,6 +135,18 @@ template <typename T> T doublylist<T>::get(int index) const {
     curr_ptr = curr_ptr->next;
   }
   return curr_ptr->key;
+}
+
+template <typename T> void doublylist<T>::update(int index, T key) {
+  if (out_of_bounds(index)) {
+    throw new std::exception();
+  }
+  index = to_index(index);
+  std::shared_ptr<node<T>> curr_ptr = m_head;
+  for (int i = 0; i < index; i++) {
+    curr_ptr = curr_ptr->next;
+  }
+  curr_ptr->key = key;
 }
 
 template <typename T> void doublylist<T>::append(T key) {
