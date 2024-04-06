@@ -1,20 +1,22 @@
 #include "doublylist.hpp"
-#include <cstdio>
 #include <iostream>
-#include <ostream>
 
 int main() {
   doublylist<int> list;
   list.append(3);
   list.append(4);
-  list.append(1);
-  list.append(2);
-
-  list.update(-1, 10);
-  printf("List contains %d? %d\n", 10, list.contains(10));
-  printf("List contains %d? %d\n", -10, list.contains(-10));
-  printf("Index of %d is %d\n", 10, list.find(10));
-  printf("Index of %d is %d\n", 3, list.find(3, 1));
-  printf("Index of %d is %d\n", 3, list.find(3, 0));
+  list.insert(0, 5);
+  list << std::cout << std::endl;
+  list.insert(3, 15);
+  list << std::cout << std::endl;
+  list.insert(1, 8);
+  list << std::cout << std::endl;
+  list.insert(3, 16);
+  list << std::cout << std::endl;
+  list.update(1, 20);
+  std::cout << list.get(1) << std::endl;
+  list.update(-2, 21);
+  std::cout << list.get(-2) << std::endl;
+  list.print();
   return 0;
 }
