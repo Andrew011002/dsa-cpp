@@ -11,6 +11,10 @@ int main() {
   list.append(2);
 
   list.update(-1, 10);
-  printf("%d\n", list.get(-1));
+  printf("List contains %d? %d\n", 10, list.contains(10));
+  printf("List contains %d? %d\n", -10, list.contains(-10));
+  printf("Index of %d is %d\n", 10, list.find(10));
+  printf("Index of %d is %d\n", 3, list.find(3, 1));
+  printf("Index of %d is %d\n", 3, list.find(3, 0));
   return 0;
 }

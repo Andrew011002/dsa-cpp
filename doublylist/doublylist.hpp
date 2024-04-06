@@ -100,7 +100,7 @@ public:
   void remove(T index);
   bool contains(T key) const;
   std::uint32_t count(T key) const;
-  int find(T key) const;
+  int find(T key, int start = 0) const;
   std::size_t length() const;
   iterator<T> begin() const;
   iterator<T> end() const;
@@ -162,6 +162,44 @@ template <typename T> void doublylist<T>::append(T key) {
     m_tail = m_tail->next;
   }
   m_length++;
+}
+
+template <typename T> bool doublylist<T>::contains(T key) const {
+  std::shared_ptr<node<T>> curr_ptr = m_head;
+  for (int i = 0; i < m_length; i++) {
+    if (curr_ptr->key == key) {
+      return true;
+    }
+    curr_ptr = curr_ptr->next;
+  }
+  return false;
+}
+
+template <typename T> std::uint32_t doublylist<T>::count(T key) const {
+  std::shared_ptr<node<T>> curr_ptr = m_head;
+  std::uint32_t n = 0;
+  for (int i = 0; i < m_length; i++) {
+    if (curr_ptr->key == key) {
+      n++;
+    }
+    curr_ptr = curr_ptr->next;
+  }
+  return n;
+}
+
+template <typename T> int doublylist<T>::find(T key, int start) const {
+  if (out_of_bounds(start)) {
+    throw new std::exception();
+  }
+  start = to_index(start);
+  std::shared_ptr<node<T>> curr_ptr = m_head;
+  for (int i = 0; i < m_length; i++) {
+    if (curr_ptr->key == key && i >= start) {
+      return i;
+    }
+    curr_ptr = curr_ptr->next;
+  }
+  return -1;
 }
 
 template <typename T> iterator<T> doublylist<T>::begin() const {
